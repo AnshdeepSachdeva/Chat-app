@@ -1,11 +1,17 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
+export interface IFriend {
+  friend: mongoose.Types.ObjectId;
+  level: number;
+}
+
 export interface IUser extends Document {
   email: string;
   password: string; // hashed
   nickname?: string;
   avatar?: string; // URL to avatar image or base64 data
   lastSeen?: Date;
+  friends: IFriend[];
 }
 
 const UserSchema: Schema = new Schema({
@@ -28,6 +34,19 @@ const UserSchema: Schema = new Schema({
     type: String,
     default: null
   },
+  friends: [
+    {
+      friend: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+      },
+      level: {
+        type: Number,
+        default: 1
+      }
+    }
+  ],
   lastSeen: {
     type: Date,
     default: Date.now
