@@ -6,6 +6,10 @@ export interface IUser extends Document {
   nickname?: string;
   avatar?: string; // URL to avatar image or base64 data
   lastSeen?: Date;
+  friends?: {
+    friend: mongoose.Types.ObjectId;
+    level: number;
+  }[];
 }
 
 const UserSchema: Schema = new Schema({
@@ -31,7 +35,13 @@ const UserSchema: Schema = new Schema({
   lastSeen: {
     type: Date,
     default: Date.now
-  }
+  },
+  friends: [
+    {
+      friend: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+      level: { type: Number, default: 1 }
+    }
+  ]
 }, {
   timestamps: true, // Automatically adds createdAt and updatedAt
   versionKey: false // Disable the __v field
